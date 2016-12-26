@@ -1,0 +1,18 @@
+---
+# tasks file for nginx-proxy
+
+- name: install required packages
+  yum: name={{ item }} state=latest
+  with_items: "{{ required_packages }}"
+
+#- name: install nginx-proxy
+#  script: nginx-proxy_installation.sh
+#  ignore_errors: true
+
+- name: copy nginx_log_cut.sh
+  copy: src=nginx_log_cut.sh dest=/storage/sh/ owner=root mode=0644
+
+- name: cron log
+  cron: name="nginx_log cut" state=present minute="1" hour="0" job="/storage/sh/nginx_log_cut.sh > /dev/null 2>&1"
+      
+

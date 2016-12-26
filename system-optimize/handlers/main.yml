@@ -1,0 +1,11 @@
+---
+# handlers file for system
+- name: sync time
+  shell: /usr/sbin/ntpdate cn.pool.ntp.org
+  ignore_errors: true
+
+- name: effect
+  shell: sysctl -p
+
+- name: reboot
+  shell: /sbin/reboot

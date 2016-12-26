@@ -1,0 +1,55 @@
+---
+- name: install required package
+  yum: name=enca state=latest
+
+- name: mkdir zabbix-agent
+  file: path={{ agent }} state=directory mode=0755
+
+- name: mkdir zabbix-agent/bin
+  file: path={{ bin }} state=directory mode=0755
+
+- name: mkdir zabbix-agent/etc
+  file: path={{ etc }} state=directory mode=0755 
+
+- name: mkdir zabbix-agent/lib
+  file: path={{ lib }} state=directory mode=0755
+
+- name: mkdir zabbix-agent/sbin
+  file: path={{ sbin }} state=directory mode=0755
+
+- name: mkdir zabbix-agent/scripts
+  file: path={{ scripts }} state=directory mode=0755 
+
+- name: mkdir zabbix-agent/etc/zabbix_agentd.conf.d
+  file: path={{ include }} state=directory mode=0755
+
+- name: upload configure file
+  template:
+    src: config.j2
+    dest: "{{ config }}"
+    owner: root
+
+- name: upload zabbix_get
+  copy: src=zabbix_get dest={{ bin }} owner=root mode=0755
+
+- name: upload zabbix_sender
+  copy: src=zabbix_sender dest={{ bin }} owner=root mode=0755
+
+- name: upload zabbix_agentd
+  copy: src=zabbix_agentd dest={{ sbin }} owner=root mode=0755
+
+- name: upload init.d scripts
+  copy: src=zabbix_agentd.sh dest=/etc/init.d/zabbix_agentd owner=root mode=0755
+
+- name: chkconfig
+  shell: chkconfig --add zabbix_agentd && chkconfig zabbix_agentd on
+
+- name: add user
+  user: name=zabbix createhome=no shell=/sbin/nologin state=present
+
+- name: start zabbix_agentd
+  service: name=zabbix_agentd state=started
+
+- name: add iptables
+  lineinfile: dest=/etc/sysconfig/iptables insertafter='^-A INPUT -i lo' line='-A INPUT -s {{ server }} -m state --state NEW -m tcp -p tcp --dport {{ port }} -j ACCEPT'
+  notify: reload iptables

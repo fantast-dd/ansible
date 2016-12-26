@@ -1,0 +1,11 @@
+port: 10050
+server: 192.168.0.8
+agent: /m2odata/server/zabbix-agent/
+bin: /m2odata/server/zabbix-agent/bin/
+etc: /m2odata/server/zabbix-agent/etc/
+lib: /m2odata/server/zabbix-agent/lib/
+sbin: /m2odata/server/zabbix-agent/sbin/
+scripts: /m2odata/server/zabbix-agent/scripts/
+config: /m2odata/server/zabbix-agent/etc/zabbix_agentd.conf
+logfile: /m2odata/log/zabbix_agentd.log
+include: /m2odata/server/zabbix-agent/etc/zabbix_agentd.conf.d/

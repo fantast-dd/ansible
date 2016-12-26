@@ -1,0 +1,19 @@
+---
+- name: install easy_install
+  yum: name=python-setuptools
+
+- name: easy_install redis argparse
+  shell: easy_install redis argparse
+
+- name: upload redis lld script  # db low-level-discovery
+  copy: src=lld-redis.py dest={{ scripts }} owner=root mode=0755
+
+- name: upload redis status script
+  copy: src=redis_zabbix.py dest={{ scripts }} owner=root mode=0755
+
+- name: update cron  # agent主动发数据到server(Zabbix trapper)
+  cron: name="redis_zabbix" state=present minute="*/1" job="/m2odata/server/zabbix-agent/scripts/redis_zabbix.py -a password"
+      
+- name: upload userparameter_redis
+  copy: src=userparameter_redis.conf dest={{ config }} owner=root mode=0644
+  notify: reload

@@ -1,0 +1,56 @@
+---
+- name: upgrade all packages  # 更新所有包
+  yum: name=* state=latest
+
+- name: install epel repository  # 安装epel
+  yum: name=epel-release state=latest
+
+- name: install required_packages  # 安装需要的包
+  yum: name={{ item }} state=latest
+  with_items: "{{ required_packages }}"
+
+- name: add user # 添加非登陆用户
+  user: name=www createhome=no shell=/sbin/nologin state=present
+
+- name: chkconfig ip6tables off # 关闭ip6tables
+  shell: "[ -f /var/lock/subsys/ip6tables ] && /etc/init.d/ip6tables stop"
+
+- name: mkdir /storage/log
+  file: path=/storage/log state=directory owner=www group=www mode=0777
+
+- name: mkdir /storage/sh
+  file: path=/storage/sh state=directory mode=0755
+
+- name: ntpdate cron # ntp更新时间计划任务
+  cron: name="sync time" state=present minute="1" job="/usr/sbin/ntpdate cn.pool.ntp.org > /dev/null 2>&1"
+  notify: sync time
+
+- name: optimize sysctl.conf # 修改内核参数
+  copy: src=sysctl.conf dest=/etc owner=root mode=0644
+  notify: effect
+
+- name: set file handlers # 修改默认能打开文件句柄数
+  blockinfile:
+      dest: "{{ dest_limits }}"
+      state: present
+      block: |
+       * soft nofile 65536
+       * hard nofile 65536
+       * soft nproc 65536
+       * hard nproc 65536
+  notify: reboot
+
+- name: set file handlers 2
+  lineinfile: dest={{ dest_limits_2 }} backrefs=yes regexp='^\*(.*)' line='#*\1'
+  notify: reboot
+
+- name: set hosts
+  lineinfile: dest={{ hosts }} backrefs=yes regexp='^(127.0.0.1\s+)localhost(\s.*)' line='\1{{ inventory_hostname }}\2'
+
+- name: set hostname  # 修改主机名
+  lineinfile: dest={{ dest_hostname }} backrefs=yes regexp='^(HOSTNAME=).*' line='\1{{ inventory_hostname }}'
+  notify: reboot
+
+- name: disabled selinux  # 关闭selinux
+  selinux: policy=targetd state=disabled
+  notify: reboot

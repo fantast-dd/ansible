@@ -1,0 +1,6 @@
+---
+# defaults file for nginx-proxy
+
+required_packages:
+    - pcre
+    - pcre-devel

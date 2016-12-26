@@ -1,0 +1,3 @@
+---
+scripts: /m2odata/server/zabbix-agent/scripts/
+config: /m2odata/server/zabbix-agent/etc/zabbix_agentd.conf.d/
