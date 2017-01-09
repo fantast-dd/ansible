@@ -18,7 +18,7 @@
 
 RETVAL=0
 prog="Zabbix Agent"
-ZABBIX_BIN="/m2odata/server/zabbix-agent/sbin/zabbix_agentd"
+ZABBIX_BIN="/usr/local/zabbix/sbin/zabbix_agentd"
 
 if [ ! -x ${ZABBIX_BIN} ] ; then
         echo -n "${ZABBIX_BIN} not installed! "

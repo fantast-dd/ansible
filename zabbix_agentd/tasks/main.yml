@@ -1,6 +1,6 @@
 ---
-- name: install required package
-  yum: name=enca state=latest
+#- name: install required package
+#  yum: name=enca state=latest
 
 - name: mkdir zabbix-agent
   file: path={{ agent }} state=directory mode=0755
@@ -50,6 +50,6 @@
 - name: start zabbix_agentd
   service: name=zabbix_agentd state=started
 
-- name: add iptables
-  lineinfile: dest=/etc/sysconfig/iptables insertafter='^-A INPUT -i lo' line='-A INPUT -s {{ server }} -m state --state NEW -m tcp -p tcp --dport {{ port }} -j ACCEPT'
-  notify: reload iptables
+#- name: add iptables
+#  lineinfile: dest=/etc/sysconfig/iptables insertafter='^-A INPUT -i lo' line='-A INPUT -s {{ server }} -m state --state NEW -m tcp -p tcp --dport {{ port }} -j ACCEPT'
+#  notify: reload iptables

@@ -1,0 +1,7 @@
+---
+- name: upload tcp-status.sh
+  copy: src=tcp-status.sh dest={{ scripts }} owner=root mode=0755
+
+- name: upload userparameter_tcp
+  copy: src=userparameter_tcp.conf dest={{ config }} owner=root mode=0644
+  notify: reload
