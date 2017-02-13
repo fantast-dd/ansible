@@ -9,3 +9,7 @@
 
 - name: reboot
   shell: /sbin/reboot
+
+- name: reload sshd
+  service: name=sshd state=reloaded
+  

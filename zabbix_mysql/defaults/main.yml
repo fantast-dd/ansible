@@ -1,0 +1,11 @@
+mysql_cnf: /usr/local/zabbix/etc/
+config: /usr/local/zabbix/etc/zabbix_agentd.conf.d/
+mysql_script: /usr/local/zabbix/scripts/
+
+host: "127.0.0.1"
+user: "root"
+pass: "test"
+
+adduser_name: "zabbix_check"
+adduser_pass: "zabbix@check"
+adduser_priv: "*.*:USAGE,SUPER,REPLICATION CLIENT"

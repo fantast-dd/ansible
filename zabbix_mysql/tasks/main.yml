@@ -1,0 +1,10 @@
+---
+- name: upload .my.cnf
+  copy: src=.my.cnf dest={{ mysql_cnf }} owner=root mode=0644
+- name: upload userparameter_mysql
+  copy: src=userparameter_mysql.conf dest={{ config }} owner=root mode=0644
+  notify: reload
+- name: install MySQLdb
+  yum: name=MySQL-python state=latest
+- name: add check dbuser
+  mysql_user: login_host={{ host }} login_user={{ user }} login_password={{ pass }} name={{ adduser_name }} password={{ adduser_pass }} priv={{ adduser_priv }}

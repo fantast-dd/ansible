@@ -1,0 +1,4 @@
+---
+- name: upload userparameter_php-fpm
+  copy: src=userparameter_php-fpm.conf dest={{ config }} owner=root mode=0644
+  notify: reload

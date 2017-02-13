@@ -1,0 +1,7 @@
+---
+- name: upload nginx-status.sh
+  copy: src=nginx-status.sh dest={{ scripts }} owner=root mode=0755
+
+- name: upload userparameter_nginx
+  copy: src=userparameter_nginx.conf dest={{ config }} owner=root mode=0644
+  notify: reload

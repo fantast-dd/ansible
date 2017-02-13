@@ -18,3 +18,4 @@ dest_limits: /etc/security/limits.conf
 dest_limits_2: /etc/security/limits.d/90-nproc.conf
 dest_hostname: /etc/sysconfig/network
 hosts: /etc/hosts
+sshd_config: /etc/ssh/sshd_config

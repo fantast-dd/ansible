@@ -21,6 +21,10 @@
 - name: mkdir /storage/sh
   file: path=/storage/sh state=directory mode=0755
 
+- name: UseDNS no
+  lineinfile: dest={{ sshd_config }} backrefs=yes regexp='^#(UseDNS) yes' line='\1 no'
+  notify: reload sshd
+
 - name: ntpdate cron # ntp更新时间计划任务
   cron: name="sync time" state=present minute="1" job="/usr/sbin/ntpdate cn.pool.ntp.org > /dev/null 2>&1"
   notify: sync time
